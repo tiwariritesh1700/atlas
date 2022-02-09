@@ -1,0 +1,55 @@
+name: atlas
+description: A new Flutter project.
+
+publish_to: 'none' # Remove this line if you wish to publish to pub.dev
+
+version: 1.0.0+1
+
+environment:
+  sdk: ">=2.12.0 <3.0.0"
+
+dependencies:
+  flutter:
+    sdk: flutter
+
+
+
+  cupertino_icons: ^1.0.2
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+
+
+flutter:
+
+  uses-material-design: true
+
+  assets:
+    - assets/images/
+
+  fonts:
+    - family: Black
+      fonts:
+        - asset: fonts/SourceSansPro-Black.ttf
+
+    - family: Bold
+      fonts:
+           - asset: fonts/SourceSansPro-Bold.ttf
+             weight: 700
+
+    - family: ExtraLight
+      fonts:
+         - asset: fonts/SourceSansPro-ExtraLight.ttf
+
+    - family: Light
+      fonts:
+           - asset: fonts/SourceSansPro-Light.ttf
+
+    - family: Regular
+      fonts:
+           - asset: fonts/SourceSansPro-Regular.ttf
+
+    - family: Semibold
+      fonts:
+           - asset: fonts/SourceSansPro-Semibold.ttf
