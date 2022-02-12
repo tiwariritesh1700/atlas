@@ -1,6 +1,7 @@
 import 'package:atlas/common/color_constants.dart';
 import 'package:atlas/common/common_widget.dart';
-import 'package:atlas/screens/language_screen.dart';
+import 'package:atlas/screens/fault_codes_screen.dart';
+import 'package:atlas/screens/product_detail_screen.dart';
 import 'package:flutter/material.dart';
 
 class SearchScreen extends StatefulWidget {
@@ -88,7 +89,9 @@ borderRadius: BorderRadius.vertical(top: Radius.circular(18))
 
                   suffixIcon: GestureDetector(
                     onTap: () {
-
+Navigator.push(context, MaterialPageRoute(builder: (context){
+  return FaultCodeScreen();
+}));
 
                     },
                     child: Container(
@@ -186,7 +189,9 @@ style: ElevatedButton.styleFrom(primary: Colors.green,padding: EdgeInsets.symmet
       child: ListView.separated(itemBuilder: (context,index){
         return InkWell(
           onTap: (){
-          
+          Navigator.push(context, MaterialPageRoute(builder: (context){
+            return ProductDetailView();
+          }));
           },
           child: Padding(
             padding: const EdgeInsets.all(8.0),

@@ -123,3 +123,27 @@ getCommonTextWidgetForDrawer(String value){
   );
 }
 
+Container getBottomNavigationBarWidget(BuildContext context) {
+  return Container(
+      alignment: Alignment.center,
+      padding: EdgeInsets.only(top: 4),
+      height: 100,
+      width: double.infinity,
+      decoration: BoxDecoration(
+          color: Colors.black54,
+          borderRadius: BorderRadius.vertical(top: Radius.circular(18))
+      ),
+      child: Padding(
+        padding: const EdgeInsets.only(left: 20.0,right: 20.0),
+        child: ElevatedButton(
+          onPressed: (){
+            Navigator.pop(context);
+          },
+          child: Text('Go back',style: TextStyle(fontFamily: 'Semibold',fontSize: 21),),
+          style: ElevatedButton.styleFrom(minimumSize: Size(MediaQuery.of(context).size.width, 55)),
+        ),
+      )
+  );
+}
+
+
