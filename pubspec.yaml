@@ -15,8 +15,18 @@ dependencies:
 
 
   cupertino_icons: ^1.0.2
+  dio: ^4.0.4
+  moor: ^4.5.0
+  sqlite3_flutter_libs: any
+  path_provider: any
+  get_it: any
+  rxdart: ^0.27.3
+  shared_preferences: any
+  url_launcher: any
 
 dev_dependencies:
+  moor_generator: ^4.4.1
+  build_runner: ^2.1.2
   flutter_test:
     sdk: flutter
 
