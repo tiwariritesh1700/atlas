@@ -158,7 +158,6 @@ super.initState();
 SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
   statusBarColor: Colors.transparent,
 ));
-MasterBloc  _masterBloc= MasterBloc();
 
   }
 }

@@ -1,14 +1,22 @@
 import 'package:atlas/common/color_constants.dart';
 import 'package:atlas/common/common_widget.dart';
 import 'package:atlas/screens/add_fix_screen.dart';
+import 'package:atlas/search_screen/bloc/search_bloc.dart';
+import 'package:atlas/search_screen/model/fault_codes_model.dart';
 import 'package:flutter/material.dart';
 class FaultCodeScreen extends StatefulWidget {
+  final SearchBloc bloc;
+  final String code;
 
+
+
+  FaultCodeScreen({Key? key, required this.bloc,required this.code}) : super(key: key);
   @override
   _FaultCodeScreenState createState() => _FaultCodeScreenState();
 }
 
 class _FaultCodeScreenState extends State<FaultCodeScreen> {
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -16,229 +24,183 @@ class _FaultCodeScreenState extends State<FaultCodeScreen> {
       drawer: customDrawer(context),
 
       bottomNavigationBar: getBottomNavigationBarWidget(context),
-      body: ListView(
-        children: [
-          getProductTextWidget(),
-          Container(
-            child: Image.asset('assets/images/tool_eg.png',height: 300,width: 300,),
+      body: StreamBuilder<List<FaultCodesModels>>(
+        stream: widget.bloc.listOfFaultCodeModelController.stream.asBroadcastStream(),
+        builder: (context, snapshot) {
+          if(snapshot.hasData && snapshot.data!=null&& snapshot.data!.length>=0)
+          {
+            return ListView(
+              children: [
+                getProductTextWidget(snapshot),
 
-          ),
-          Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Padding(
-                padding: const EdgeInsets.only(left: 14.0,bottom: 8),
-                child: Text(
-                    'Title Goes Here',
-                    style: TextStyle(fontFamily: 'Bold', fontSize: 28)),
-              ),
-              Padding(
-                padding: const EdgeInsets.only(left: 14.0,top: 4),
-                child: Text(
-                    'Random data lorem ipsum dolor,Random data lorem ipsum dolor Random data lorem ipsum dolor Random data lorem ipsum dolor Random data lorem ipsum dolor Random data lorem ipsum dolor',
-                    style: TextStyle(fontFamily: 'Regular', fontSize: 21)),
-              ),
+                Container(
+                  child: Image.network(snapshot.data![0].faultEqImage??"",height: 300,width: 300,),
 
-              Padding(
-                padding: const EdgeInsets.only(left: 14.0,top: 18,bottom: 8),
-                child: Text(
-                    'Fault Causes',
-                    style: TextStyle(fontFamily: 'Bold', fontSize: 28)),
-
-
-              ),
-              Padding(
-                padding: const EdgeInsets.only(left: 14.0,top: 18,bottom: 8),
-                child: Row(
-                  children: [
-                    Container(
-
-                      padding:EdgeInsets.all(10),
-
-                      decoration: BoxDecoration(
-                        color: Colors.blue,
-                        shape: BoxShape.circle
-
-                      ),
-                      child: Text(
-                          '1',
-                          style: TextStyle(fontFamily: 'Regular', fontSize: 21)),
-                    ),
-                    SizedBox(width: 20,),
-                    Expanded(
-
-                      child: Padding(
-                        padding: const EdgeInsets.only(right: 8.0),
-                        child: Text(
-                            'Random data lorem ipsum Random data lorem ipsum dolor dolor',
-                            style: TextStyle(fontFamily: 'Regular', fontSize: 21)),
-                      ),
-                    )
-                  ],
                 ),
-
-
-              ),
-              Padding(
-                padding: const EdgeInsets.only(left: 14.0,top: 18,bottom: 8),
-                child: Row(
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Container(
-
-                      padding:EdgeInsets.all(10),
-
-                      decoration: BoxDecoration(
-                          color: Colors.blue,
-                          shape: BoxShape.circle
-
-                      ),
-                      child: Text(
-                          '2',
-                          style: TextStyle(fontFamily: 'Regular', fontSize: 21)),
-                    ),
-                    SizedBox(width: 20,),
-                    Expanded(
-
-                      child: Padding(
-                        padding: const EdgeInsets.only(right: 8.0),
-                        child: Text(
-                            'Random data lorem ipsum Random data lorem ipsum dolor dolor',
-                            style: TextStyle(fontFamily: 'Regular', fontSize: 21)),
-                      ),
-                    )
-                  ],
-                ),
-
-
-              ),
-              Padding(
-                padding: const EdgeInsets.only(left: 14.0,top: 18,bottom: 8),
-                child: Row(
-                  children: [
-                    Container(
-
-                      padding:EdgeInsets.all(10),
-
-                      decoration: BoxDecoration(
-                          color: Colors.blue,
-                          shape: BoxShape.circle
-
-                      ),
-                      child: Text(
-                          '3',
-                          style: TextStyle(fontFamily: 'Regular', fontSize: 21)),
-                    ),
-                    SizedBox(width: 20,),
-                    Expanded(
-
-                      child: Padding(
-                        padding: const EdgeInsets.only(right: 8.0),
-                        child: Text(
-                            'Random data lorem ipsum Random data lorem ipsum dolor dolor',
-                            style: TextStyle(fontFamily: 'Regular', fontSize: 21)),
-                      ),
-                    )
-                  ],
-                ),
-
-
-              ),
-
-              Padding(
-                padding: const EdgeInsets.only(top:8.0),
-                child: Container(
-                  height: 80,
-                  color: Colors.grey,
-                  child: Row(children: [
                     Padding(
-                      padding: const EdgeInsets.only(left: 14.0,),
+                      padding: const EdgeInsets.only(left: 14.0,bottom: 8),
+                      child: Text(
+                          snapshot.data![0].title??"",
+                          style: TextStyle(fontFamily: 'Bold', fontSize: 28)),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.only(left: 14.0,top: 4),
+                      child: Text(
+                          snapshot.data![0].description??"",
+                          style: TextStyle(fontFamily: 'Regular', fontSize: 21)),
+                    ),
+
+                    Padding(
+                      padding: const EdgeInsets.only(left: 14.0,top: 18,bottom: 8),
                       child: Text(
                           'Fault Causes',
-                          style: TextStyle(fontFamily: 'Bold', fontSize: 24)),
+                          style: TextStyle(fontFamily: 'Bold', fontSize: 28)),
 
 
                     ),
+                   new Column(
 
-                    Spacer(),
-                    InkWell(
-                      onTap: (){
-                        Navigator.push(context, MaterialPageRoute(builder: (context){
-                          return AddFixScreen();
-                        }));
-                      },
-                      child: Padding(
-                        padding: const EdgeInsets.only(right: 14.0),
-                        child: Text(
-                            'Add your fix',
-                            style: TextStyle(fontFamily: 'Regular', fontSize: 21,decoration: TextDecoration.underline)),
+          children: new List.generate(snapshot.data![0].causes!.length, (index) => new  Padding(
+            padding: const EdgeInsets.only(left: 14.0,top: 18,bottom: 8),
+            child: Row(
+              children: [
+                Container(
+
+                  padding:EdgeInsets.all(10),
+
+                  decoration: BoxDecoration(
+                      color: Colors.blue,
+                      shape: BoxShape.circle
+
+                  ),
+                  child: Text(
+                      index.toString(),
+                      style: TextStyle(fontFamily: 'Regular', fontSize: 21)),
+                ),
+                SizedBox(width: 20,),
+                Expanded(
+
+                  child: Padding(
+                    padding: const EdgeInsets.only(right: 8.0),
+                    child: Text(
+                        snapshot.data![0].causes![index],
+                        style: TextStyle(fontFamily: 'Regular', fontSize: 21)),
+                  ),
+                )
+              ],
+            ),
 
 
+          )),
+           ),
+
+
+                    Padding(
+                      padding: const EdgeInsets.only(top:8.0),
+                      child: Container(
+                        height: 80,
+                        color: Colors.grey,
+                        child: Row(children: [
+                          Padding(
+                            padding: const EdgeInsets.only(left: 14.0,),
+                            child: Text(
+                                'Fault Causes',
+                                style: TextStyle(fontFamily: 'Bold', fontSize: 24)),
+
+
+                          ),
+
+                          Spacer(),
+                          InkWell(
+                            onTap: (){
+                              Navigator.push(context, MaterialPageRoute(builder: (context){
+                                return AddFixScreen();
+                              }));
+                            },
+                            child: Padding(
+                              padding: const EdgeInsets.only(right: 14.0),
+                              child: Text(
+                                  'Add your fix',
+                                  style: TextStyle(fontFamily: 'Regular', fontSize: 21,decoration: TextDecoration.underline)),
+
+
+                            ),
+                          ),
+
+                        ],),
                       ),
                     ),
+                    // Padding(
+                    //   padding: const EdgeInsets.only(left: 14.0,top: 8),
+                    //   child: Text(
+                    //       'Rob 12/03/21',
+                    //       style: TextStyle(fontFamily: 'Semibold', fontSize: 21)),
+                    //
+                    //
+                    // ),
+                    // Padding(
+                    //   padding: const EdgeInsets.all(8.0),
+                    //   child: Container(
+                    //     alignment: Alignment.center,
+                    //     height: 80,
+                    //     color: Colors.blue[200],
+                    //     child:  Padding(
+                    //       padding: const EdgeInsets.only(left: 17.0),
+                    //       child: Text(
+                    //           'Random data lorem ipsum Random data lorem ipsum dolor dolor',
+                    //           style: TextStyle(fontFamily: 'Regular', fontSize: 21,)),
+                    //
+                    //
+                    //     ),
+                    //   ),
+                    // ),
+                    //
+                    // Padding(
+                    //   padding: const EdgeInsets.only(left: 14.0,top: 8),
+                    //   child: Text(
+                    //       'Stuart 03/08/20',
+                    //       style: TextStyle(fontFamily: 'Semibold', fontSize: 21)),
+                    //
+                    //
+                    // ),
+                    // Padding(
+                    //   padding: const EdgeInsets.all(8.0),
+                    //   child: Container(
+                    //     alignment: Alignment.center,
+                    //     height: 80,
+                    //     color: Colors.blue[200],
+                    //     child:  Padding(
+                    //       padding: const EdgeInsets.only(left: 17.0),
+                    //       child: Text(
+                    //           'Random data lorem ipsum Random data lorem ipsum dolor dolor',
+                    //           style: TextStyle(fontFamily: 'Regular', fontSize: 21,)),
+                    //
+                    //
+                    //     ),
+                    //   ),
+                    // ),
 
-                  ],),
-                ),
-              ),
-              Padding(
-                padding: const EdgeInsets.only(left: 14.0,top: 8),
-                child: Text(
-                    'Rob 12/03/21',
-                    style: TextStyle(fontFamily: 'Semibold', fontSize: 21)),
+                    SizedBox(height: 10,)
 
+                  ],
+                )
 
-              ),
-              Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Container(
-                  alignment: Alignment.center,
-                  height: 80,
-                  color: Colors.blue[200],
-                  child:  Padding(
-                    padding: const EdgeInsets.only(left: 17.0),
-                    child: Text(
-                        'Random data lorem ipsum Random data lorem ipsum dolor dolor',
-                        style: TextStyle(fontFamily: 'Regular', fontSize: 21,)),
+              ],
+            );
 
+          }
 
-                  ),
-                ),
-              ),
+          return Center(child: CircularProgressIndicator(),);
 
-              Padding(
-                padding: const EdgeInsets.only(left: 14.0,top: 8),
-                child: Text(
-                    'Stuart 03/08/20',
-                    style: TextStyle(fontFamily: 'Semibold', fontSize: 21)),
-
-
-              ),
-              Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Container(
-                  alignment: Alignment.center,
-                  height: 80,
-                  color: Colors.blue[200],
-                  child:  Padding(
-                    padding: const EdgeInsets.only(left: 17.0),
-                    child: Text(
-                        'Random data lorem ipsum Random data lorem ipsum dolor dolor',
-                        style: TextStyle(fontFamily: 'Regular', fontSize: 21,)),
-
-
-                  ),
-                ),
-              ),
-
-              SizedBox(height: 10,)
-
-            ],
-          )
-        ],
+        }
       ),
     );
   }
 
-  Container getProductTextWidget() {
+  Container getProductTextWidget(AsyncSnapshot<List<FaultCodesModels>> snapshot) {
     return Container(
       height: 80,
       width: double.infinity,
@@ -265,7 +227,7 @@ class _FaultCodeScreenState extends State<FaultCodeScreen> {
             Padding(
               padding: const EdgeInsets.only(left: 20),
               child: Text(
-                'Fault 1',
+                snapshot.data![0].title??"",
                 style: TextStyle(fontFamily: 'Black', fontSize: 24,color: Colors.white),
               ),
             ),
@@ -293,4 +255,9 @@ class _FaultCodeScreenState extends State<FaultCodeScreen> {
     );
   }
 
+  @override
+  void initState() {
+    super.initState();
+    widget.bloc.loadFaultCodeData(widget.code);
+  }
 }

@@ -61,4 +61,6 @@ class MasterDAO extends DatabaseAccessor<AppDatabase> with _$MasterDAOMixin {
       print(e);
     }
   }
+
+
 }

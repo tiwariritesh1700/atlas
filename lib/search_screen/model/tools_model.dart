@@ -1,3 +1,4 @@
+import 'package:atlas/common/app_database.dart';
 import 'package:atlas/search_screen/model/tools_docs.dart';
 
 class ToolsModel {
@@ -73,6 +74,35 @@ class ToolsModel {
       map['tools_docs'] = _toolsDocs?.map((v) => v.toJson()).toList();
     }
     return map;
+  }
+
+
+
+
+
+  ToolsMoorModelData convertFromToolsModelToToolsDataMoorModel() {
+    try {
+      return ToolsMoorModelData(
+        id: this._id,
+        name: this._name,
+        image: this._image,
+        description: this._description,
+        insightImages: this._insightImage, appDataID: '',);
+    } catch (e) {
+      print(e);
+      throw ToolsMoorModelData(id: this._id, appDataID: '');
+    }
+  }
+
+ static ToolsModel convertFromToolsDataMoorModelDataToToolsModel(
+      ToolsMoorModelData toolsMoorModelData) {
+    return ToolsModel(
+      id: toolsMoorModelData.id ?? "",
+      name: toolsMoorModelData.name ?? "",
+      image: toolsMoorModelData.image ?? "",
+      description: toolsMoorModelData.description ?? "",
+      videoLink:toolsMoorModelData.videoLink,
+    );
   }
 
 }

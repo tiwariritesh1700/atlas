@@ -1,5 +1,6 @@
 
 
+import 'package:atlas/common/app_database.dart';
 import 'package:atlas/search_screen/model/fault_codes_model.dart';
 import 'package:atlas/search_screen/model/tools_model.dart';
 
@@ -103,8 +104,6 @@ class AppDataModel {
   }
 
 
-
-
   Map<String, dynamic> toJson() {
     final map = <String, dynamic>{};
     map['language_id'] = _languageId;
@@ -123,6 +122,32 @@ class AppDataModel {
       map['faqs'] = _faqs?.map((v) => v.toJson()).toList();
     }
     return map;
+  }
+
+
+  AppDataMoorModelData convertFromAppDataModelToAppDataMoorModel() {
+    try {
+      return AppDataMoorModelData(
+          id: this._languageId,
+          languageName: this._languageName,
+          languageIcon: this._languageIcon,
+          privacyPolicy: this._privacyPolicy,
+          termsAndConditions: this._termsAndConditions,);
+    } catch (e) {
+      print(e);
+      throw AppDataMoorModelData(id: this._languageId);
+    }
+  }
+
+  AppDataModel convertFromAppDataMoorModelDataToAppModel(
+      AppDataMoorModelData appDataMoorModelData) {
+    return AppDataModel(
+      languageId: appDataMoorModelData.id ?? "",
+      languageName: appDataMoorModelData.languageName ?? "",
+      languageIcon: appDataMoorModelData.languageIcon ?? "",
+      termsAndConditions: appDataMoorModelData.termsAndConditions ?? "",
+      privacyPolicy:this._privacyPolicy,
+    );
   }
 
 }

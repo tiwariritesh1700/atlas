@@ -58,7 +58,7 @@ class _CommunicationScreenState extends State<CommunicationScreen> {
                 return InkWell(
                   onTap: (){
                     LocalStorageService.addStringValueInLocalStorageService(key:Constants.PREFS_COMMUNICATION, value: snapshot.data![index].id);
-                    BaseRepository.callAppDataApi(ApiEndPoint.APP_BASE_URL+ApiEndPoint.GET_APP_DATA_API);
+                  //  BaseRepository.callAppDataApi(ApiEndPoint.APP_BASE_URL+ApiEndPoint.GET_APP_DATA_API);
 
                     Navigator.push(context, MaterialPageRoute(builder: (context){
                       return SearchScreen();

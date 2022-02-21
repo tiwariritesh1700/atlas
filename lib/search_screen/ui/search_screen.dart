@@ -2,6 +2,8 @@ import 'package:atlas/common/color_constants.dart';
 import 'package:atlas/common/common_widget.dart';
 import 'package:atlas/screens/fault_codes_screen.dart';
 import 'package:atlas/screens/product_detail_screen.dart';
+import 'package:atlas/search_screen/bloc/search_bloc.dart';
+import 'package:atlas/search_screen/model/tools_model.dart';
 import 'package:flutter/material.dart';
 
 class SearchScreen extends StatefulWidget {
@@ -12,6 +14,9 @@ class SearchScreen extends StatefulWidget {
 }
 
 class _SearchScreenState extends State<SearchScreen> {
+
+  SearchBloc  searchBloc =SearchBloc();
+  TextEditingController controller = TextEditingController();
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -78,8 +83,10 @@ borderRadius: BorderRadius.vertical(top: Radius.circular(18))
           Padding(
             padding: const EdgeInsets.all(12.0),
             child: TextFormField(
+              controller:  controller,
               decoration: InputDecoration(
                 filled: true,
+
 
                   hintText: 'Search for fault codes',
                 prefixIcon: Icon(Icons.search,size: 30,color: ColorConst.textGrey,),
@@ -89,8 +96,11 @@ borderRadius: BorderRadius.vertical(top: Radius.circular(18))
 
                   suffixIcon: GestureDetector(
                     onTap: () {
+                      if(controller.text.isEmpty){
+                        return;
+                      }
 Navigator.push(context, MaterialPageRoute(builder: (context){
-  return FaultCodeScreen();
+  return FaultCodeScreen(bloc: searchBloc,code:controller.text ,);
 }));
 
                     },
@@ -184,61 +194,77 @@ style: ElevatedButton.styleFrom(primary: Colors.green,padding: EdgeInsets.symmet
       ),
     );
   }
-  Flexible getListOfToolsWidgets() {
-    return Flexible(
-      child: ListView.separated(itemBuilder: (context,index){
-        return InkWell(
-          onTap: (){
-          Navigator.push(context, MaterialPageRoute(builder: (context){
-            return ProductDetailView();
-          }));
-          },
-          child: Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: Row(
-                children:[ Padding(
-                  padding: const EdgeInsets.only(left:10.0),
-                  child: CircleAvatar(
-                    radius: 28,
-                    child: Image.asset('assets/images/tool_eg.png'),
-                  ),
-                ),
-                  Padding(
-                    padding: const EdgeInsets.only(left: 20),
-                    child: Text(
-                      'Latest tools,',
-                      style: TextStyle(fontFamily: 'SemiBold', fontSize: 18),
-                    ),
-                  ),
-                  Spacer(),
-                  Builder(
-                    builder: (BuildContext context) {
-                      return GestureDetector(
-                        onTap: () {
-                        },
-                        child: Image.asset(
-                          'assets/images/imgNext.png',
-                          height: 25,
-                          width: 25,
-                        ),
-                      );
-                    },
-                  ),
+  Widget getListOfToolsWidgets() {
+    return StreamBuilder<List<ToolsModel>>(
 
-                ]
-            ),
-          ),
-        );
-      }, separatorBuilder: (context,index){
-        return Padding(
-          padding: const EdgeInsets.only(top: 4.0,bottom: 4),
-          child: Divider(
-            height: 1,
-            thickness: 1,
-            color: ColorConst.themeLightGrey,
-          ),
-        );
-      }, itemCount: 17),
+      stream: searchBloc.listOfToolsModelController.stream.asBroadcastStream(),
+      builder: (context, snapshot) {
+         if(snapshot.hasData && snapshot.data!=null&& snapshot.data!.length>0){
+           return Flexible(
+             child: ListView.separated(itemBuilder: (context,index){
+               return InkWell(
+                 onTap: (){
+                   Navigator.push(context, MaterialPageRoute(builder: (context){
+                     return ProductDetailView(toolsModel:snapshot.data![index],bloc: searchBloc,);
+                   }));
+                 },
+                 child: Padding(
+                   padding: const EdgeInsets.all(8.0),
+                   child: Row(
+                       children:[ Padding(
+                         padding: const EdgeInsets.only(left:10.0),
+                         child: CircleAvatar(
+                           radius: 28,
+                           backgroundImage: NetworkImage(
+                             snapshot.data![index].image??"",
+
+                           ),
+
+                         ),
+                       ),
+                         Padding(
+                           padding: const EdgeInsets.only(left: 20),
+                           child: Text(
+                             snapshot.data![index].name??"",
+                             style: TextStyle(fontFamily: 'SemiBold', fontSize: 18),
+                           ),
+                         ),
+                         Spacer(),
+                         Builder(
+                           builder: (BuildContext context) {
+                             return GestureDetector(
+                               onTap: () {
+                               },
+                               child: Image.asset(
+                                 'assets/images/imgNext.png',
+                                 height: 25,
+                                 width: 25,
+                               ),
+                             );
+                           },
+                         ),
+
+                       ]
+                   ),
+                 ),
+               );
+             }, separatorBuilder: (context,index){
+               return Padding(
+                 padding: const EdgeInsets.only(top: 4.0,bottom: 4),
+                 child: Divider(
+                   height: 1,
+                   thickness: 1,
+                   color: ColorConst.themeLightGrey,
+                 ),
+               );
+             }, itemCount: snapshot.data!.length,
+             ),
+           );
+         }
+         return Center(child: CircularProgressIndicator());
+
+
+      }
     );
   }
 

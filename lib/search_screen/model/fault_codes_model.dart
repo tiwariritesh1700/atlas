@@ -1,3 +1,7 @@
+import 'dart:convert';
+
+import 'package:atlas/common/app_database.dart';
+
 class FaultCodesModels {
   FaultCodesModels({
     String? code,
@@ -6,8 +10,8 @@ class FaultCodesModels {
     String? languageId,
     String? title,
     String? description,
-    List<String>? causes,
-    List<String>? solutions,
+    List<dynamic>? causes,
+    List<dynamic>? solutions,
     String? faultEqImage,
     String? videoType,
     String? videoLink,
@@ -19,8 +23,8 @@ class FaultCodesModels {
     _languageId = languageId;
     _title = title;
     _description = description;
-    _causes = causes;
-    _solutions = solutions;
+    _causes = causes!.cast<String>();
+    _solutions = solutions!.cast<String>();
     _faultEqImage = faultEqImage;
     _videoType = videoType;
     _videoLink = videoLink;
@@ -95,5 +99,50 @@ class FaultCodesModels {
     }
     return map;
   }
+
+
+
+  FaultCodesMoorModelData convertFromFaultCodeModelToFaultCodeMoorModel() {
+    try {
+      return FaultCodesMoorModelData(
+        id: this._id,
+        code: this._code,
+        codeID: this._codeId,
+        languageID: this._languageId,
+        title: this._title,
+        faultEqImage: this._faultEqImage,
+        videoLink: this._videoLink,
+        videoType: this._videoType,
+        equipmentID: this._equipmentId,
+        causes: json.encode(this._causes),
+        solutions: json.encode(this._solutions),
+        fixes: json.encode(this._fixes),
+        description: this._description,
+        );
+    } catch (e) {
+      print(e);
+      throw ToolsMoorModelData(id: this._id, appDataID: '');
+    }
+  }
+
+  static FaultCodesModels convertFromFaultDataMoorModelDataToFaultModel(
+      FaultCodesMoorModelData faultCodesMoorModelData) {
+    return FaultCodesModels(
+      id: faultCodesMoorModelData.id,
+      codeId: faultCodesMoorModelData.codeID,
+      code: faultCodesMoorModelData.code,
+      languageId: faultCodesMoorModelData.languageID,
+      title: faultCodesMoorModelData.title,
+      description: faultCodesMoorModelData.description,
+      faultEqImage: faultCodesMoorModelData.faultEqImage,
+      videoType: faultCodesMoorModelData.videoType,
+      videoLink: faultCodesMoorModelData.videoLink,
+      equipmentId: faultCodesMoorModelData.equipmentID,
+      causes: json.decode(faultCodesMoorModelData.causes??""),
+      solutions: json.decode(faultCodesMoorModelData.solutions??""),
+    fixes: json.decode(faultCodesMoorModelData.fixes??"")
+    );
+  }
+
 
 }
