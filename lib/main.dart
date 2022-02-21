@@ -7,6 +7,7 @@ import 'package:atlas/common/service_locator.dart';
 import 'package:atlas/communication/model/communication_model.dart';
 import 'package:atlas/language/model/language_model.dart';
 import 'package:atlas/language/ui/language_screen.dart';
+import 'package:atlas/search_screen/ui/search_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:rxdart/rxdart.dart';
 
@@ -34,7 +35,7 @@ class AtlasApp extends StatelessWidget {
     return MaterialApp(
       title: 'Atlas',
       debugShowCheckedModeBanner: false,
-      home: LanguageScreen(),
+      home: LocalStorageService.getStringValueInLocalStorageService(key: Constants.PREFS_LANGUAGE)!=null?SearchScreen():LanguageScreen(),
     );
   }
 }

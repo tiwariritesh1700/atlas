@@ -176,7 +176,7 @@ class _FaultCodeScreenState extends State<FaultCodeScreen> {
                     //       padding: const EdgeInsets.only(left: 17.0),
                     //       child: Text(
                     //           'Random data lorem ipsum Random data lorem ipsum dolor dolor',
-                    //           style: TextStyle(fontFamily: 'Regular', fontSize: 21,)),
+                    //           style: TextStyle(fontFamilym: 'Regular', fontSize: 21,)),
                     //
                     //
                     //     ),
