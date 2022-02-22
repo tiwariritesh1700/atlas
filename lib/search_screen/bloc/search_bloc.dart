@@ -17,12 +17,21 @@ class SearchBloc {
     loadToolsData(LocalStorageService.getStringValueInLocalStorageService(
             key: Constants.PREFS_LANGUAGE) ??
         "");
+    this.listOfToolsModelController.stream.listen(_listOfToolsModelListListener);
+
 
 
   }
 
-  StreamController<List<ToolsModel>> listOfToolsModelController =
-      BehaviorSubject<List<ToolsModel>>();
+  final listOfToolsModelController =
+      BehaviorSubject<List<ToolsModel>>.seeded([]);
+
+  Stream <List<ToolsModel>> get  listOfToolsModelListStream =>
+      listOfToolsModelController.stream.asBroadcastStream();
+
+  StreamSink<List<ToolsModel>> get listOfToolsModelSink {
+    return listOfToolsModelController.sink;
+  }
   StreamController<List<ToolsDocsModels>> listOfToolsDocModelController =
   BehaviorSubject<List<ToolsDocsModels>>();
 
@@ -30,13 +39,13 @@ class SearchBloc {
   BehaviorSubject<List<FaultCodesModels>>();
 
   void loadToolsData(String languageID) async {
-    listOfToolsModelController.sink.add([]);
+    listOfToolsModelSink.add([]);
     await _searchRepository.callAppDataApi(ApiEndPoint.APP_BASE_URL+ApiEndPoint.GET_APP_DATA_API);
 
     List<ToolsModel> listOfLanguageModel =
         await _searchRepository.getListOfToolsModels(languageID);
     if (listOfLanguageModel.isNotEmpty) {
-      listOfToolsModelController.sink.add(listOfLanguageModel);
+      listOfToolsModelSink.add(listOfLanguageModel);
     }
   }
 
@@ -63,5 +72,8 @@ class SearchBloc {
     listOfToolsModelController.close();
     listOfToolsDocModelController.close();
     listOfFaultCodeModelController.close();
+  }
+
+  void _listOfToolsModelListListener(List<ToolsModel> event) {
   }
 }

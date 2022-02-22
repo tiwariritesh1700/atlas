@@ -142,6 +142,14 @@ class BaseRepository {
           }
 
           try {
+            print(listOfDataModel.length);
+
+            try {
+              await locator<AppDatabase>().toolsDataDAO.deleteAllToolsData();
+            } catch (e) {
+              print(e);
+            }
+
             //APPDATAMODEL INSERTIING
             await Future.forEach<AppDataModel>(listOfDataModel, (element) async {
                         await locator<AppDatabase>().appDataDAO.insertAppData(

@@ -6,8 +6,6 @@ import 'package:atlas/communication/model/communication_model.dart';
 import 'package:atlas/language/bloc/language_bloc.dart';
 import 'package:atlas/language/model/language_model.dart';
 import 'package:atlas/main.dart';
-import 'package:atlas/repo/base_repositiory.dart';
-import 'package:atlas/search_screen/bloc/search_bloc.dart';
 import 'package:flutter/material.dart';
 import 'package:url_launcher/url_launcher.dart';
 
@@ -61,32 +59,33 @@ PreferredSize customAppBar() {
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
-                  Builder(
-                  builder: (context) {
-                  return InkWell(
-                    onTap: (){
-              CommunicationBloc.loadCommunicationDataLatest();
-                      showDialog(
-                          context: context,
-                          builder: (context) {
-                            return commonCommunicationDialog();
-                          });
-                    },
-                    child: StreamBuilder<String>(
-                        stream: selectedCommunicationTitleController.stream
-                            .asBroadcastStream(),
-                        builder: (contextt, snapshot) {
-                          return Padding(
-                            padding: const EdgeInsets.only(top: 40.0, left: 10),
-                            child: Center(
-                              child: Text(
-                                snapshot.data ?? "",
-                                style: TextStyle(color: Colors.white),
+                  Builder(builder: (context) {
+                    return InkWell(
+                      onTap: () {
+                        CommunicationBloc.loadCommunicationDataLatest();
+                        showDialog(
+                            context: context,
+                            builder: (context) {
+                              return commonCommunicationDialog();
+                            });
+                      },
+                      child: StreamBuilder<String>(
+                          stream: selectedCommunicationTitleController.stream
+                              .asBroadcastStream(),
+                          builder: (contextt, snapshot) {
+                            return Padding(
+                              padding:
+                                  const EdgeInsets.only(top: 40.0, left: 10),
+                              child: Center(
+                                child: Text(
+                                  snapshot.data ?? "",
+                                  style: TextStyle(color: Colors.white),
+                                ),
                               ),
-                            ),
-                          );
-                        }),
-                  );}),
+                            );
+                          }),
+                    );
+                  }),
                   Builder(
                     builder: (context) {
                       return InkWell(
@@ -272,152 +271,165 @@ Widget commonLanguageDialog() {
                   snapshot.data != null &&
                   snapshot.data!.length > 0
               ? Container(
-            constraints: BoxConstraints(
-                maxHeight: snapshot.data!.length>7?400:200,
-                minHeight: 200,
-            ),
-                child: ListView.separated(
-                    itemBuilder: (context, index) {
-                      return InkWell(
-                        onTap: () {
-                          LocalStorageService
-                              .addStringValueInLocalStorageService(
-                                  key: Constants.PREFS_LANGUAGE,
-                                  value: snapshot.data![index].id);
-                          LocalStorageService
-                              .addStringValueInLocalStorageService(
-                                  key: Constants.PREFS_LANGUAGE_ICON,
-                                  value: snapshot.data![index].icon);
-                          SearchBloc();
+                  constraints: BoxConstraints(
+                    maxHeight: snapshot.data!.length > 7 ? 400 : 200,
+                    minHeight: 200,
+                  ),
+                  child: ListView.separated(
+                      itemBuilder: (context, index) {
+                        return InkWell(
+                          onTap: () {
+                            LocalStorageService
+                                .addStringValueInLocalStorageService(
+                                    key: Constants.PREFS_LANGUAGE,
+                                    value: snapshot.data![index].id);
+                            LocalStorageService
+                                .addStringValueInLocalStorageService(
+                                    key: Constants.PREFS_LANGUAGE_ICON,
+                                    value: snapshot.data![index].icon);
+                            searchBloc.loadToolsData(LocalStorageService
+                                    .getStringValueInLocalStorageService(
+                                        key: Constants.PREFS_LANGUAGE) ??
+                                "");
 
-                          selectedLanguageModelController
-                              .add(snapshot.data![index].icon);
+                            selectedLanguageModelController
+                                .add(snapshot.data![index].icon);
 
-                          Navigator.pop(context);
-                        },
-                        child: Padding(
-                          padding: const EdgeInsets.all(4.0),
-                          child: Row(children: [
-                            Padding(
-                              padding: const EdgeInsets.all(4.0),
-                              child: CircleAvatar(
-                                backgroundColor: Colors.red,
-                                backgroundImage:
-                                    NetworkImage(snapshot.data![index].icon),
-                                radius: 14,
+                            Navigator.pop(context);
+                          },
+                          child: Padding(
+                            padding: const EdgeInsets.all(4.0),
+                            child: Row(children: [
+                              Padding(
+                                padding: const EdgeInsets.all(4.0),
+                                child: CircleAvatar(
+                                  backgroundColor: Colors.red,
+                                  backgroundImage:
+                                      NetworkImage(snapshot.data![index].icon),
+                                  radius: 14,
+                                ),
                               ),
-                            ),
-                            Padding(
-                              padding: const EdgeInsets.only(left: 8),
-                              child: Text(
-                                snapshot.data![index].name,
-                                style: TextStyle(
-                                    fontFamily: 'SemiBold', fontSize: 14),
+                              Padding(
+                                padding: const EdgeInsets.only(left: 8),
+                                child: Text(
+                                  snapshot.data![index].name,
+                                  style: TextStyle(
+                                      fontFamily: 'SemiBold', fontSize: 14),
+                                ),
                               ),
-                            ),
-                            Spacer(),
-                            Builder(
-                              builder: (BuildContext context) {
-                                return GestureDetector(
-                                  onTap: () {},
-                                  child: Image.asset(
-                                    'assets/images/imgNext.png',
-                                    height: 14,
-                                    width: 14,
-                                  ),
-                                );
-                              },
-                            ),
-                          ]),
-                        ),
-                      );
-                    },
-                    separatorBuilder: (context, index) {
-                      return Padding(
-                        padding: const EdgeInsets.only(top: 4.0, bottom: 4),
-                        child: Divider(
-                          height: 1,
-                          thickness: 1,
-                          color: ColorConst.themeLightGrey,
-                        ),
-                      );
-                    },
-                    itemCount: snapshot.data!.length),
-              )
+                              Spacer(),
+                              Builder(
+                                builder: (BuildContext context) {
+                                  return GestureDetector(
+                                    onTap: () {},
+                                    child: Image.asset(
+                                      'assets/images/imgNext.png',
+                                      height: 14,
+                                      width: 14,
+                                    ),
+                                  );
+                                },
+                              ),
+                            ]),
+                          ),
+                        );
+                      },
+                      separatorBuilder: (context, index) {
+                        return Padding(
+                          padding: const EdgeInsets.only(top: 4.0, bottom: 4),
+                          child: Divider(
+                            height: 1,
+                            thickness: 1,
+                            color: ColorConst.themeLightGrey,
+                          ),
+                        );
+                      },
+                      itemCount: snapshot.data!.length),
+                )
               : Container(
                   height: 400,
                   child: Center(child: CircularProgressIndicator())),
         );
       });
 }
-Widget commonCommunicationDialog(){
+
+Widget commonCommunicationDialog() {
   return StreamBuilder<List<CommunicationModel>>(
       stream: listOfGlobalCommunicationController.stream.asBroadcastStream(),
       builder: (context, snapshot) {
         return Dialog(
-          child: snapshot.hasData && snapshot.data!=null&& snapshot.data!.length>0?
-
-           Container(
-              constraints: BoxConstraints(
-                maxHeight: snapshot.data!.length>7?400:270,
-             minHeight: 200,
-           ),
-             child: ListView.separated(itemBuilder: (context,index){
-              return InkWell(
-                onTap: (){
-                  LocalStorageService.addStringValueInLocalStorageService(key:Constants.PREFS_COMMUNICATION, value: snapshot.data![index].id);
-                  LocalStorageService.addStringValueInLocalStorageService(key:Constants.PREFS_COMMUNICATION_NAME, value: snapshot.data![index].title);
-
-                  selectedCommunicationTitleController.add(snapshot.data![index].title);
-                  SearchBloc();
-                  Navigator.pop(context,);
-                },
-                child: Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: Row(
-                      children:[
-                        Padding(
-                          padding: const EdgeInsets.only(left: 8),
-                          child: Text(
-                            snapshot.data![index].title,
-                            style: TextStyle(fontFamily: 'SemiBold', fontSize: 17),
-                          ),
-                        ),
-                        Spacer(),
-                        Builder(
-                          builder: (BuildContext context) {
-                            return GestureDetector(
-                              onTap: () {
-                              },
-                              child: Image.asset(
-                                'assets/images/imgNext.png',
-                                height: 14,
-                                width: 14,
-                              ),
-                            );
-                          },
-                        ),
-
-                      ]
+          child: snapshot.hasData &&
+                  snapshot.data != null &&
+                  snapshot.data!.length > 0
+              ? Container(
+                  constraints: BoxConstraints(
+                    maxHeight: snapshot.data!.length > 7 ? 400 : 270,
+                    minHeight: 200,
                   ),
-                ),
-              );
-          }, separatorBuilder: (context,index){
-              return Padding(
-                padding: const EdgeInsets.only(top: 4.0,bottom: 4),
-                child: Divider(
-                  height: 1,
-                  thickness: 1,
-                  color: ColorConst.themeLightGrey,
-                ),
-              );
-          }, itemCount: snapshot.data!.length),
-           ):
+                  child: ListView.separated(
+                      itemBuilder: (context, index) {
+                        return InkWell(
+                          onTap: () {
+                            LocalStorageService
+                                .addStringValueInLocalStorageService(
+                                    key: Constants.PREFS_COMMUNICATION,
+                                    value: snapshot.data![index].id);
+                            LocalStorageService
+                                .addStringValueInLocalStorageService(
+                                    key: Constants.PREFS_COMMUNICATION_NAME,
+                                    value: snapshot.data![index].title);
 
-         Container(
-             height: 400,
-             child: Center(child: CircularProgressIndicator())),
+                            selectedCommunicationTitleController
+                                .add(snapshot.data![index].title);
+                            searchBloc.loadToolsData(LocalStorageService
+                                    .getStringValueInLocalStorageService(
+                                        key: Constants.PREFS_LANGUAGE) ??
+                                "");
+                            Navigator.pop(context);
+                          },
+                          child: Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: Row(children: [
+                              Padding(
+                                padding: const EdgeInsets.only(left: 8),
+                                child: Text(
+                                  snapshot.data![index].title,
+                                  style: TextStyle(
+                                      fontFamily: 'SemiBold', fontSize: 17),
+                                ),
+                              ),
+                              Spacer(),
+                              Builder(
+                                builder: (BuildContext context) {
+                                  return GestureDetector(
+                                    onTap: () {},
+                                    child: Image.asset(
+                                      'assets/images/imgNext.png',
+                                      height: 14,
+                                      width: 14,
+                                    ),
+                                  );
+                                },
+                              ),
+                            ]),
+                          ),
+                        );
+                      },
+                      separatorBuilder: (context, index) {
+                        return Padding(
+                          padding: const EdgeInsets.only(top: 4.0, bottom: 4),
+                          child: Divider(
+                            height: 1,
+                            thickness: 1,
+                            color: ColorConst.themeLightGrey,
+                          ),
+                        );
+                      },
+                      itemCount: snapshot.data!.length),
+                )
+              : Container(
+                  height: 400,
+                  child: Center(child: CircularProgressIndicator())),
         );
-      }
-  );
+      });
 }

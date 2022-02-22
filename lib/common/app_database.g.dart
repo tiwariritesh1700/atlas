@@ -1555,7 +1555,7 @@ class $ToolsMoorModelTable extends ToolsMoorModel
   }
 
   @override
-  Set<GeneratedColumn> get $primaryKey => {id};
+  Set<GeneratedColumn> get $primaryKey => <GeneratedColumn>{};
   @override
   ToolsMoorModelData map(Map<String, dynamic> data, {String? tablePrefix}) {
     return ToolsMoorModelData.fromData(data, _db,
@@ -2421,7 +2421,7 @@ class $FaultCodesMoorModelTable extends FaultCodesMoorModel
   }
 
   @override
-  Set<GeneratedColumn> get $primaryKey => <GeneratedColumn>{};
+  Set<GeneratedColumn> get $primaryKey => {id};
   @override
   FaultCodesMoorModelData map(Map<String, dynamic> data,
       {String? tablePrefix}) {

@@ -12,8 +12,4 @@ class ToolsMoorModel extends Table{
   TextColumn get videoLink => text().nullable()();
   TextColumn get insightImages => text().nullable()();
 
-
-  @override
-  Set<Column>? get primaryKey => {id};
-
 }

@@ -76,6 +76,15 @@ class ToolsDataDAO extends DatabaseAccessor<AppDatabase> with _$ToolsDataDAOMixi
   }
 
 
+  Future deleteAllToolsData() async {
+    try {
+      return delete(db.toolsMoorModel).go();
+    } catch (e) {
+      print(e);
+    }
+  }
+
+
 
 
 }

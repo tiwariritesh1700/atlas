@@ -7,6 +7,7 @@ import 'package:atlas/common/service_locator.dart';
 import 'package:atlas/communication/model/communication_model.dart';
 import 'package:atlas/language/model/language_model.dart';
 import 'package:atlas/language/ui/language_screen.dart';
+import 'package:atlas/search_screen/bloc/search_bloc.dart';
 import 'package:atlas/search_screen/ui/search_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:rxdart/rxdart.dart';
@@ -17,6 +18,7 @@ StreamController<String> selectedCommunicationTitleController = BehaviorSubject<
 
 StreamController<List<LanguageModel>> listOfGlobalLanguageModelController = BehaviorSubject<List<LanguageModel>>();
 StreamController<List<CommunicationModel>> listOfGlobalCommunicationController = BehaviorSubject<List<CommunicationModel>>();
+SearchBloc  searchBloc =SearchBloc();
 
 
 Future<void> main() async {

@@ -1,5 +1,6 @@
 import 'package:atlas/common/color_constants.dart';
 import 'package:atlas/common/common_widget.dart';
+import 'package:atlas/main.dart';
 import 'package:atlas/screens/fault_codes_screen.dart';
 import 'package:atlas/screens/product_detail_screen.dart';
 import 'package:atlas/search_screen/bloc/search_bloc.dart';
@@ -15,7 +16,6 @@ class SearchScreen extends StatefulWidget {
 
 class _SearchScreenState extends State<SearchScreen> {
 
-  SearchBloc  searchBloc =SearchBloc();
   TextEditingController controller = TextEditingController();
   @override
   Widget build(BuildContext context) {
@@ -197,7 +197,7 @@ style: ElevatedButton.styleFrom(primary: Colors.green,padding: EdgeInsets.symmet
   Widget getListOfToolsWidgets() {
     return StreamBuilder<List<ToolsModel>>(
 
-      stream: searchBloc.listOfToolsModelController.stream.asBroadcastStream(),
+      stream: searchBloc.listOfToolsModelListStream,
       builder: (context, snapshot) {
          if(snapshot.hasData && snapshot.data!=null&& snapshot.data!.length>0){
            return Flexible(
