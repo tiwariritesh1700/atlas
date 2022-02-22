@@ -20,10 +20,8 @@ class Constants{
   static String PREFS_TERMS_AND_CONDITION="terms_condition";
   static String PREFS_FAQ="faq";
   static String PREFS_LANGUAGE="language";
+  static String PREFS_LANGUAGE_ICON="language_icon";
+  static String PREFS_COMMUNICATION_NAME="commnunication_name";
   static String PREFS_COMMUNICATION="communication";
-
-
-
-
 
 }

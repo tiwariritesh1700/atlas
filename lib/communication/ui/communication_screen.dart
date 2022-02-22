@@ -7,6 +7,7 @@ import 'package:atlas/common/local_storage.dart';
 import 'package:atlas/communication/bloc/communication_bloc.dart';
 import 'package:atlas/communication/model/communication_model.dart';
 import 'package:atlas/language/ui/language_screen.dart';
+import 'package:atlas/main.dart';
 import 'package:atlas/repo/base_repositiory.dart';
 import 'package:atlas/search_screen/ui/search_screen.dart';
 import 'package:flutter/material.dart';
@@ -58,8 +59,9 @@ class _CommunicationScreenState extends State<CommunicationScreen> {
                 return InkWell(
                   onTap: (){
                     LocalStorageService.addStringValueInLocalStorageService(key:Constants.PREFS_COMMUNICATION, value: snapshot.data![index].id);
-                  //  BaseRepository.callAppDataApi(ApiEndPoint.APP_BASE_URL+ApiEndPoint.GET_APP_DATA_API);
+                    LocalStorageService.addStringValueInLocalStorageService(key:Constants.PREFS_COMMUNICATION_NAME, value: snapshot.data![index].title);
 
+                    selectedCommunicationTitleController.add(snapshot.data![index].title);
                     Navigator.push(context, MaterialPageRoute(builder: (context){
                       return SearchScreen();
                     }));

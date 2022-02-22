@@ -141,56 +141,59 @@ class BaseRepository {
             print(e);
           }
 
-          await Future.forEach<AppDataModel>(listOfDataModel, (element) async {
-            await locator<AppDatabase>().appDataDAO.insertAppData(
-                element.convertFromAppDataModelToAppDataMoorModel());
-          });
-          ToolsMoorModelData toolsMoorModelData = ToolsMoorModelData(appDataID: "");
+          try {
+            //APPDATAMODEL INSERTIING
+            await Future.forEach<AppDataModel>(listOfDataModel, (element) async {
+                        await locator<AppDatabase>().appDataDAO.insertAppData(
+                            element.convertFromAppDataModelToAppDataMoorModel());
+                        ToolsMoorModelData toolsMoorModelData = ToolsMoorModelData(appDataID: "");
 
-          mapOfToolModel.forEach((key, value) async {
-            try {
-
-              await Future.forEach<ToolsModel>(value, (element) async {
-                try {
-           toolsMoorModelData =
-                      element.convertFromToolsModelToToolsDataMoorModel();
-                  await locator<AppDatabase>().toolsDataDAO.insertToolsData(
-                      toolsMoorModelData.copyWith(appDataID: key));
-                } catch (e) {
-                  print(e);
-                }
-
-                try {
-                  if (element.toolsDocs != null &&
-                      element.toolsDocs!.length > 0) {
-                    await Future.forEach<ToolsDocsModels>(
-                        element.toolsDocs ?? [], (element) async {
-                      try {
-                        ToolsDocMoorModelData toolsDocMoorModelData = element
-                            .convertFromToolsDocModelToToolsDocDataMoorModel();
-                        await locator<AppDatabase>()
-                            .toolsDocDAO
-                            .insertToolDocsData(toolsDocMoorModelData.copyWith(
-                                toolsDataID: toolsMoorModelData.id));
-                      } catch (e) {
-                        print(e);
-                      }
-                    });
-                  }
-                } catch (e) {
-                  print(e);
-                }
-              });
-            } catch (e) {
-              print(e);
-            }
-          });
+                        await     Future.forEach<ToolsModel>(element.tools??[], (tools) async {
+                          toolsMoorModelData =
+                              tools.convertFromToolsModelToToolsDataMoorModel();
+                          await locator<AppDatabase>().toolsDataDAO.insertToolsData(
+                              toolsMoorModelData.copyWith(appDataID: element.languageId));
 
 
-          Future.forEach<FaultCodesModels>(listOfFaultCodeModel, (element) async {
-            await locator<AppDatabase>().faultCodeDAO.insertFaultCodesData(
-                element.convertFromFaultCodeModelToFaultCodeMoorModel());
-          });
+
+
+
+                          try {
+                            if (tools.toolsDocs != null &&
+                                tools.toolsDocs!.length > 0) {
+                              await Future.forEach<ToolsDocsModels>(
+                                  tools.toolsDocs ?? [], (element) async {
+                                try {
+                                  ToolsDocMoorModelData toolsDocMoorModelData = element
+                                      .convertFromToolsDocModelToToolsDocDataMoorModel();
+                                  await locator<AppDatabase>()
+                                      .toolsDocDAO
+                                      .insertToolDocsData(toolsDocMoorModelData.copyWith(
+                                      toolsDataID: toolsMoorModelData.id));
+                                } catch (e) {
+                                  print(e);
+                                }
+                              });
+                            }
+                          } catch (e) {
+                            print(e);
+                          }
+                        });
+
+                        });
+          } catch (e) {
+            print(e);
+          }
+
+
+          try {
+            await     Future.forEach<FaultCodesModels>(listOfFaultCodeModel, (element) async {
+                        await locator<AppDatabase>().faultCodeDAO.insertFaultCodesData(
+                            element.convertFromFaultCodeModelToFaultCodeMoorModel());
+                      });
+          } catch (e) {
+            print(e);
+          }
         }
       }
     } catch (e) {

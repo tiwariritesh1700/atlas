@@ -13,7 +13,11 @@ import 'package:rxdart/rxdart.dart';
 
 
 StreamController<String> selectedLanguageModelController = BehaviorSubject<String>();
-StreamController<CommunicationModel> communicationModelController = StreamController<CommunicationModel>();
+StreamController<String> selectedCommunicationTitleController = BehaviorSubject<String>();
+
+StreamController<List<LanguageModel>> listOfGlobalLanguageModelController = BehaviorSubject<List<LanguageModel>>();
+StreamController<List<CommunicationModel>> listOfGlobalCommunicationController = BehaviorSubject<List<CommunicationModel>>();
+
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -23,9 +27,12 @@ Future<void> main() async {
   });
  await LocalStorageService.getInstance();
 
-if(LocalStorageService.getStringValueInLocalStorageService(key: Constants.PREFS_LANGUAGE)!=null){
-  selectedLanguageModelController.add(LocalStorageService.getStringValueInLocalStorageService(key: Constants.PREFS_LANGUAGE)??"");
+if(LocalStorageService.getStringValueInLocalStorageService(key: Constants.PREFS_LANGUAGE_ICON)!=null){
+  selectedLanguageModelController.add(LocalStorageService.getStringValueInLocalStorageService(key: Constants.PREFS_LANGUAGE_ICON)??"");
 }
+  if(LocalStorageService.getStringValueInLocalStorageService(key: Constants.PREFS_COMMUNICATION_NAME)!=null){
+    selectedCommunicationTitleController.add(LocalStorageService.getStringValueInLocalStorageService(key: Constants.PREFS_COMMUNICATION_NAME)??"");
+  }
   runApp(AtlasApp());
 }
 

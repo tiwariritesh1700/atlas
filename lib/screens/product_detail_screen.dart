@@ -4,6 +4,7 @@ import 'package:atlas/search_screen/bloc/search_bloc.dart';
 import 'package:atlas/search_screen/model/tools_docs.dart';
 import 'package:atlas/search_screen/model/tools_model.dart';
 import 'package:flutter/material.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class ProductDetailView extends StatefulWidget {
   final ToolsModel toolsModel;
@@ -64,48 +65,54 @@ class _ProductDetailViewState extends State<ProductDetailView> {
                     scrollDirection: Axis.vertical,
                     shrinkWrap: true,
                     itemBuilder: (BuildContext context, int index) {
-                      return Padding(
-                        padding:
-                        const EdgeInsets.only(left: 14.0, right: 14, bottom: 8),
-                        child: Container(
-                          decoration:
-                          BoxDecoration(border: Border.all(color: Colors.grey)),
-                          child: Padding(
-                            padding: const EdgeInsets.all(8.0),
-                            child: Row(children: [
-                              Padding(
-                                padding: const EdgeInsets.only(left: 10.0),
-                                child: Image.network(
-                                  snapshot.data![index].image ?? "",
-                                  height: 48,
-                                  width: 48,
+                      return InkWell(
+                        onTap: () async{
+                          try {
+                            await launch(snapshot.data![index].image ??
+                                                          "",);
+                          } catch (e) {
+                            print(e);
+                          }
+                        },
+                        child: Padding(
+                          padding:
+                          const EdgeInsets.only(left: 14.0, right: 14, bottom: 8),
+                          child: Container(
+                            decoration:
+                            BoxDecoration(border: Border.all(color: Colors.grey)),
+                            child: Padding(
+                              padding: const EdgeInsets.all(8.0),
+                              child: Row(children: [
+                                Padding(
+                                  padding: const EdgeInsets.only(left:10.0),
+                                  child: Image.asset('assets/images/pdf_eg.png',height: 48,width: 48,),
                                 ),
-                              ),
-                              Padding(
-                                padding: const EdgeInsets.only(left: 20),
-                                child: Text(
-                                  snapshot.data![index].imageName ??
-                                      "",
-                                  style: TextStyle(
-                                      fontFamily: 'SemiBold',
-                                      fontWeight: FontWeight.bold,
-                                      fontSize: 18),
+                                Padding(
+                                  padding: const EdgeInsets.only(left: 20),
+                                  child: Text(
+                                    snapshot.data![index].imageName ??
+                                        "",
+                                    style: TextStyle(
+                                        fontFamily: 'SemiBold',
+                                        fontWeight: FontWeight.bold,
+                                        fontSize: 18),
+                                  ),
                                 ),
-                              ),
-                              Spacer(),
-                              Builder(
-                                builder: (BuildContext context) {
-                                  return GestureDetector(
-                                    onTap: () {},
-                                    child: Image.asset(
-                                      'assets/images/imgNext.png',
-                                      height: 25,
-                                      width: 25,
-                                    ),
-                                  );
-                                },
-                              ),
-                            ]),
+                                Spacer(),
+                                Builder(
+                                  builder: (BuildContext context) {
+                                    return GestureDetector(
+                                      onTap: () {},
+                                      child: Image.asset(
+                                        'assets/images/imgNext.png',
+                                        height: 25,
+                                        width: 25,
+                                      ),
+                                    );
+                                  },
+                                ),
+                              ]),
+                            ),
                           ),
                         ),
                       );
@@ -116,95 +123,13 @@ class _ProductDetailViewState extends State<ProductDetailView> {
                 return Center(child: CircularProgressIndicator(),);
               }
           ),
-          // Padding(
-          //   padding: const EdgeInsets.only(left:14.0,right: 14,bottom: 8),
-          //   child: Container(
-          //     decoration: BoxDecoration(
-          //       border:Border.all(color: Colors.grey)
-          //     ),
-          //     child: Padding(
-          //       padding: const EdgeInsets.all(8.0),
-          //       child: Row(
-          //           children:[ Padding(
-          //             padding: const EdgeInsets.only(left:10.0),
-          //             child: Image.asset('assets/images/pdf_eg.png',height: 48,width: 48,),
-          //           ),
-          //             Padding(
-          //               padding: const EdgeInsets.only(left: 20),
-          //               child: Text(
-          //                 'Instruction Meal',
-          //                 style: TextStyle(fontFamily: 'SemiBold',fontWeight: FontWeight.bold, fontSize: 18),
-          //               ),
-          //             ),
-          //             Spacer(),
-          //             Builder(
-          //               builder: (BuildContext context) {
-          //                 return GestureDetector(
-          //                   onTap: () {
-          //                   },
-          //                   child: Image.asset(
-          //                     'assets/images/imgNext.png',
-          //                     height: 25,
-          //                     width: 25,
-          //                   ),
-          //                 );
-          //               },
-          //             ),
-          //
-          //           ]
-          //       ),
-          //     ),
-          //   ),
-          // ),
-          // Padding(
-          //   padding: const EdgeInsets.only(left:14.0,right: 14),
-          //   child: Container(
-          //     decoration: BoxDecoration(
-          //         border:Border.all(color: Colors.grey)
-          //     ),
-          //     child: Padding(
-          //       padding: const EdgeInsets.all(8.0),
-          //       child: Row(
-          //           children:[ Padding(
-          //             padding: const EdgeInsets.only(left:10.0),
-          //             child: Image.asset('assets/images/pdf_eg.png',height: 48,width: 48,),
-          //           ),
-          //             Padding(
-          //               padding: const EdgeInsets.only(left: 20),
-          //               child: Text(
-          //                 'Instruction Meal',
-          //                 style: TextStyle(fontFamily: 'SemiBold',fontWeight: FontWeight.bold, fontSize: 18),
-          //               ),
-          //             ),
-          //             Spacer(),
-          //             Builder(
-          //               builder: (BuildContext context) {
-          //                 return GestureDetector(
-          //                   onTap: () {
-          //                   },
-          //                   child: Image.asset(
-          //                     'assets/images/imgNext.png',
-          //                     height: 25,
-          //                     width: 25,
-          //                   ),
-          //                 );
-          //               },
-          //             ),
-          //
-          //           ]
-          //       ),
-          //     ),
-          //   ),
-          // ),
+
           SizedBox(
             height: 10,
           )
         ],
       ),
-      // bottomSheet: DraggableScrollableSheet( expand : false,initialChildSize:0.08,minChildSize:0.001,builder: (context,controller){
-      //   return getBottomSheetContainer();
-      //
-      // }),
+
       bottomNavigationBar: getBottomNavigationBarWidget(context),
     );
   }

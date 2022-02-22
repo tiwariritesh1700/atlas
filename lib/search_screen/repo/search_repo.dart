@@ -9,8 +9,7 @@ class SearchRepository extends BaseRepository{
 
   Future<List<ToolsModel>> getListOfToolsModels(String languageID) async {
     List<ToolsModel> listOfToolsModel = [];
-    List<ToolsMoorModelData> listOfToolsMoorModelData =
-    await locator<AppDatabase>().toolsDataDAO.getAllToolsDataByLanguageID(languageID);
+    List<ToolsMoorModelData> listOfToolsMoorModelData = await locator<AppDatabase>().toolsDataDAO.getAllToolsDataByLanguageID(languageID);
     if (listOfToolsMoorModelData.isNotEmpty &&
         listOfToolsMoorModelData.length > 0) {
       listOfToolsMoorModelData.forEach((element) {

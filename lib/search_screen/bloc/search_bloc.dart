@@ -7,7 +7,7 @@ import 'package:atlas/search_screen/model/fault_codes_model.dart';
 import 'package:atlas/search_screen/model/tools_docs.dart';
 import 'package:atlas/search_screen/model/tools_model.dart';
 import 'package:atlas/search_screen/repo/search_repo.dart';
-import 'package:rxdart/rxdart.dart';
+import 'package:rxdart/subjects.dart';
 
 class SearchBloc {
   late SearchRepository _searchRepository;
@@ -17,6 +17,8 @@ class SearchBloc {
     loadToolsData(LocalStorageService.getStringValueInLocalStorageService(
             key: Constants.PREFS_LANGUAGE) ??
         "");
+
+
   }
 
   StreamController<List<ToolsModel>> listOfToolsModelController =
@@ -28,6 +30,7 @@ class SearchBloc {
   BehaviorSubject<List<FaultCodesModels>>();
 
   void loadToolsData(String languageID) async {
+    listOfToolsModelController.sink.add([]);
     await _searchRepository.callAppDataApi(ApiEndPoint.APP_BASE_URL+ApiEndPoint.GET_APP_DATA_API);
 
     List<ToolsModel> listOfLanguageModel =

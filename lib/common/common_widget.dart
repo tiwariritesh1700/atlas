@@ -1,8 +1,13 @@
 import 'package:atlas/common/color_constants.dart';
 import 'package:atlas/common/constants.dart';
 import 'package:atlas/common/local_storage.dart';
+import 'package:atlas/communication/bloc/communication_bloc.dart';
+import 'package:atlas/communication/model/communication_model.dart';
+import 'package:atlas/language/bloc/language_bloc.dart';
 import 'package:atlas/language/model/language_model.dart';
 import 'package:atlas/main.dart';
+import 'package:atlas/repo/base_repositiory.dart';
+import 'package:atlas/search_screen/bloc/search_bloc.dart';
 import 'package:flutter/material.dart';
 import 'package:url_launcher/url_launcher.dart';
 
@@ -17,51 +22,112 @@ PreferredSize customAppBar() {
       flexibleSpace:
           Column(mainAxisAlignment: MainAxisAlignment.center, children: [
         Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            Builder(
-              builder: (BuildContext context) {
-                return GestureDetector(
-                  onTap: () {
-                    Scaffold.of(context).openDrawer();
+            Expanded(
+              child: Container(
+                alignment: Alignment.topLeft,
+                child: Builder(
+                  builder: (BuildContext context) {
+                    return GestureDetector(
+                      onTap: () {
+                        Scaffold.of(context).openDrawer();
+                      },
+                      child: Padding(
+                        padding: const EdgeInsets.only(top: 40.0),
+                        child: Image.asset(
+                          'assets/images/menu_icon.png',
+                          height: 70,
+                          width: 70,
+                        ),
+                      ),
+                    );
                   },
-                  child: Padding(
-                    padding: const EdgeInsets.only(top: 40.0),
-                    child: Image.asset(
-                      'assets/images/menu_icon.png',
-                      height: 70,
-                      width: 70,
-                    ),
-                  ),
-                );
-              },
-            ),
-            Center(
-              child: Padding(
-                padding: const EdgeInsets.only(top: 40.0),
-                child: Image.asset(
-                  'assets/images/logo.png',
-                  height: 70,
-                  width: 90,
                 ),
               ),
             ),
-            StreamBuilder<String>(
-              stream: selectedLanguageModelController.stream.asBroadcastStream(),
-              builder: (context, snapshot) {
-                return Center(
-                  child: Padding(
-                    padding: const EdgeInsets.only(top: 40.0, right: 10),
-                    child: snapshot.hasData && snapshot.data!=null && snapshot.data!=""? CircleAvatar(
-                      backgroundImage: NetworkImage(snapshot.data??""),
-                      radius: 28,
-                    ): CircleAvatar(
-                    backgroundColor: Colors.red,
-                radius: 28,
-                ),
+            Expanded(
+              child: Center(
+                child: Padding(
+                  padding: const EdgeInsets.only(top: 40.0),
+                  child: Image.asset(
+                    'assets/images/logo.png',
+                    height: 70,
+                    width: 90,
                   ),
-                );
-              }
+                ),
+              ),
+            ),
+            Expanded(
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: [
+                  Builder(
+                  builder: (context) {
+                  return InkWell(
+                    onTap: (){
+              CommunicationBloc.loadCommunicationDataLatest();
+                      showDialog(
+                          context: context,
+                          builder: (context) {
+                            return commonCommunicationDialog();
+                          });
+                    },
+                    child: StreamBuilder<String>(
+                        stream: selectedCommunicationTitleController.stream
+                            .asBroadcastStream(),
+                        builder: (contextt, snapshot) {
+                          return Padding(
+                            padding: const EdgeInsets.only(top: 40.0, left: 10),
+                            child: Center(
+                              child: Text(
+                                snapshot.data ?? "",
+                                style: TextStyle(color: Colors.white),
+                              ),
+                            ),
+                          );
+                        }),
+                  );}),
+                  Builder(
+                    builder: (context) {
+                      return InkWell(
+                        onTap: () {
+                          LanguageBloc.loadLanguageDataLatest();
+
+                          showDialog(
+                              context: context,
+                              builder: (context) {
+                                return commonLanguageDialog();
+                              });
+                        },
+                        child: StreamBuilder<String>(
+                            stream: selectedLanguageModelController.stream
+                                .asBroadcastStream(),
+                            builder: (context, snapshot) {
+                              return Center(
+                                child: Padding(
+                                  padding: const EdgeInsets.only(
+                                    top: 40.0,
+                                  ),
+                                  child: snapshot.hasData &&
+                                          snapshot.data != null &&
+                                          snapshot.data != ""
+                                      ? CircleAvatar(
+                                          backgroundImage:
+                                              NetworkImage(snapshot.data ?? ""),
+                                          radius: 16,
+                                        )
+                                      : CircleAvatar(
+                                          backgroundColor: Colors.red,
+                                          radius: 16,
+                                        ),
+                                ),
+                              );
+                            }),
+                      );
+                    },
+                  )
+                ],
+              ),
             )
           ],
         )
@@ -126,7 +192,7 @@ Container customDrawer(BuildContext context) {
   );
 }
 
-getCommonTextWidgetForDrawer(String value, int tapNumber)  {
+getCommonTextWidgetForDrawer(String value, int tapNumber) {
   return InkWell(
     onTap: () {
       switch (tapNumber) {
@@ -137,26 +203,28 @@ getCommonTextWidgetForDrawer(String value, int tapNumber)  {
           {
             //Case of FAQ
 
-            launch(LocalStorageService.getStringValueInLocalStorageService(key: Constants.PREFS_FAQ)??"");
+            launch(LocalStorageService.getStringValueInLocalStorageService(
+                    key: Constants.PREFS_FAQ) ??
+                "");
           }
           break;
         case 2:
           {
             //Case of Privacy policy
-            launch(LocalStorageService.getStringValueInLocalStorageService(key: Constants.PREFS_PRIVACY_POLICY)??"");
-
-
+            launch(LocalStorageService.getStringValueInLocalStorageService(
+                    key: Constants.PREFS_PRIVACY_POLICY) ??
+                "");
           }
           break;
         case 3:
           {
             //Case of Terms and Condition
 
-            launch(LocalStorageService.getStringValueInLocalStorageService(key: Constants.PREFS_TERMS_AND_CONDITION)??"");
-
+            launch(LocalStorageService.getStringValueInLocalStorageService(
+                    key: Constants.PREFS_TERMS_AND_CONDITION) ??
+                "");
           }
           break;
-
       }
     },
     child: Padding(
@@ -193,4 +261,163 @@ Container getBottomNavigationBarWidget(BuildContext context) {
               minimumSize: Size(MediaQuery.of(context).size.width, 55)),
         ),
       ));
+}
+
+Widget commonLanguageDialog() {
+  return StreamBuilder<List<LanguageModel>>(
+      stream: listOfGlobalLanguageModelController.stream.asBroadcastStream(),
+      builder: (context, snapshot) {
+        return Dialog(
+          child: snapshot.hasData &&
+                  snapshot.data != null &&
+                  snapshot.data!.length > 0
+              ? Container(
+            constraints: BoxConstraints(
+                maxHeight: snapshot.data!.length>7?400:200,
+                minHeight: 200,
+            ),
+                child: ListView.separated(
+                    itemBuilder: (context, index) {
+                      return InkWell(
+                        onTap: () {
+                          LocalStorageService
+                              .addStringValueInLocalStorageService(
+                                  key: Constants.PREFS_LANGUAGE,
+                                  value: snapshot.data![index].id);
+                          LocalStorageService
+                              .addStringValueInLocalStorageService(
+                                  key: Constants.PREFS_LANGUAGE_ICON,
+                                  value: snapshot.data![index].icon);
+                          SearchBloc();
+
+                          selectedLanguageModelController
+                              .add(snapshot.data![index].icon);
+
+                          Navigator.pop(context);
+                        },
+                        child: Padding(
+                          padding: const EdgeInsets.all(4.0),
+                          child: Row(children: [
+                            Padding(
+                              padding: const EdgeInsets.all(4.0),
+                              child: CircleAvatar(
+                                backgroundColor: Colors.red,
+                                backgroundImage:
+                                    NetworkImage(snapshot.data![index].icon),
+                                radius: 14,
+                              ),
+                            ),
+                            Padding(
+                              padding: const EdgeInsets.only(left: 8),
+                              child: Text(
+                                snapshot.data![index].name,
+                                style: TextStyle(
+                                    fontFamily: 'SemiBold', fontSize: 14),
+                              ),
+                            ),
+                            Spacer(),
+                            Builder(
+                              builder: (BuildContext context) {
+                                return GestureDetector(
+                                  onTap: () {},
+                                  child: Image.asset(
+                                    'assets/images/imgNext.png',
+                                    height: 14,
+                                    width: 14,
+                                  ),
+                                );
+                              },
+                            ),
+                          ]),
+                        ),
+                      );
+                    },
+                    separatorBuilder: (context, index) {
+                      return Padding(
+                        padding: const EdgeInsets.only(top: 4.0, bottom: 4),
+                        child: Divider(
+                          height: 1,
+                          thickness: 1,
+                          color: ColorConst.themeLightGrey,
+                        ),
+                      );
+                    },
+                    itemCount: snapshot.data!.length),
+              )
+              : Container(
+                  height: 400,
+                  child: Center(child: CircularProgressIndicator())),
+        );
+      });
+}
+Widget commonCommunicationDialog(){
+  return StreamBuilder<List<CommunicationModel>>(
+      stream: listOfGlobalCommunicationController.stream.asBroadcastStream(),
+      builder: (context, snapshot) {
+        return Dialog(
+          child: snapshot.hasData && snapshot.data!=null&& snapshot.data!.length>0?
+
+           Container(
+              constraints: BoxConstraints(
+                maxHeight: snapshot.data!.length>7?400:270,
+             minHeight: 200,
+           ),
+             child: ListView.separated(itemBuilder: (context,index){
+              return InkWell(
+                onTap: (){
+                  LocalStorageService.addStringValueInLocalStorageService(key:Constants.PREFS_COMMUNICATION, value: snapshot.data![index].id);
+                  LocalStorageService.addStringValueInLocalStorageService(key:Constants.PREFS_COMMUNICATION_NAME, value: snapshot.data![index].title);
+
+                  selectedCommunicationTitleController.add(snapshot.data![index].title);
+                  SearchBloc();
+                  Navigator.pop(context,);
+                },
+                child: Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Row(
+                      children:[
+                        Padding(
+                          padding: const EdgeInsets.only(left: 8),
+                          child: Text(
+                            snapshot.data![index].title,
+                            style: TextStyle(fontFamily: 'SemiBold', fontSize: 17),
+                          ),
+                        ),
+                        Spacer(),
+                        Builder(
+                          builder: (BuildContext context) {
+                            return GestureDetector(
+                              onTap: () {
+                              },
+                              child: Image.asset(
+                                'assets/images/imgNext.png',
+                                height: 14,
+                                width: 14,
+                              ),
+                            );
+                          },
+                        ),
+
+                      ]
+                  ),
+                ),
+              );
+          }, separatorBuilder: (context,index){
+              return Padding(
+                padding: const EdgeInsets.only(top: 4.0,bottom: 4),
+                child: Divider(
+                  height: 1,
+                  thickness: 1,
+                  color: ColorConst.themeLightGrey,
+                ),
+              );
+          }, itemCount: snapshot.data!.length),
+           ):
+
+         Container(
+             height: 400,
+             child: Center(child: CircularProgressIndicator())),
+        );
+      }
+  );
 }

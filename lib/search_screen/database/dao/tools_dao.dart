@@ -49,6 +49,7 @@ class ToolsDataDAO extends DatabaseAccessor<AppDatabase> with _$ToolsDataDAOMixi
 
   Future getAllToolsDataByLanguageID(String languageID) async {
     try {
+      var data =await select(db.toolsMoorModel).get();
       return await (select(db.toolsMoorModel)..where((tbl) => tbl.appDataID.equals(languageID))).get();
     } catch (e) {
       print(e);

@@ -23,6 +23,7 @@ dependencies:
   rxdart: ^0.27.3
   shared_preferences: any
   url_launcher: any
+  video_player: any
 
 dev_dependencies:
   moor_generator: ^4.4.1

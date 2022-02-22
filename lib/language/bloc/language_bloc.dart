@@ -3,10 +3,11 @@ import 'dart:async';
 import 'package:atlas/common/api_endpoint.dart';
 import 'package:atlas/language/model/language_model.dart';
 import 'package:atlas/language/repo/language_repositiory.dart';
+import 'package:atlas/main.dart';
 import 'package:rxdart/rxdart.dart';
 
 class LanguageBloc {
-  late LanguageRepository languageRepository ;
+  static late LanguageRepository languageRepository ;
   LanguageBloc(){
     languageRepository =LanguageRepository();
       loadLanguageData();
@@ -20,6 +21,17 @@ class LanguageBloc {
     List<LanguageModel> listOfLanguageModel = await languageRepository.getListOfLanguageModels();
     if(listOfLanguageModel.isNotEmpty){
       listOfLanguageModelController.sink.add(listOfLanguageModel);
+      listOfGlobalLanguageModelController.sink.add(listOfLanguageModel);
+    }
+
+  }
+  static void loadLanguageDataLatest() async{
+
+    languageRepository =LanguageRepository();
+
+    List<LanguageModel> listOfLanguageModel = await languageRepository.getListOfLanguageModels();
+    if(listOfLanguageModel.isNotEmpty){
+      listOfGlobalLanguageModelController.sink.add(listOfLanguageModel);
     }
 
   }

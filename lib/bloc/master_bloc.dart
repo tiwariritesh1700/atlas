@@ -6,7 +6,7 @@ class MasterBloc extends BaseRepository{
   late LanguageBloc _languageBloc;
 
    MasterBloc(){
-      getMasterData(ApiEndPoint.APP_BASE_URL+ApiEndPoint.GET_MASTER_DATA_API);
+      //getMasterData(ApiEndPoint.APP_BASE_URL+ApiEndPoint.GET_MASTER_DATA_API);
    }
    void getMasterData(String url) async{
    await callMasterApi(url);

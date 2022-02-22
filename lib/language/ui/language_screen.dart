@@ -50,7 +50,9 @@ LanguageBloc _languageBloc = LanguageBloc();
                 onTap: (){
 
                   LocalStorageService.addStringValueInLocalStorageService(key:Constants.PREFS_LANGUAGE, value: snapshot.data![index].id);
-  selectedLanguageModelController.add(snapshot.data![index].icon);
+                  LocalStorageService.addStringValueInLocalStorageService(key:Constants.PREFS_LANGUAGE_ICON, value: snapshot.data![index].icon);
+
+                  selectedLanguageModelController.add(snapshot.data![index].icon);
                   Navigator.push(context, MaterialPageRoute(builder: (context){
                     return CommunicationScreen();
                   }));
