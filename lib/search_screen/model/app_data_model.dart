@@ -81,25 +81,41 @@ class AppDataModel {
     _languageName = json['language_name'];
     _languageIcon = json['language_icon'];
 
-    if (json['fault_codes'] != null) {
-      _faultCodes = [];
-      json['fault_codes'].forEach((v) {
-        _faultCodes?.add(FaultCodesModels.fromJson(v));
-      });
-    }
-    if (json['tools'] != null) {
-      _tools = [];
-      json['tools'].forEach((v) {
-        _tools?.add(ToolsModel.fromJson(v));
-      });
-    }
-    _privacyPolicy = json['privacy_policy'];
-    _termsAndConditions = json['terms_and_conditions'];
-    if (json['faqs'] != null) {
-      _faqs = [];
-      json['faqs'].forEach((v) {
-        _faqs?.add(json.fromJson(v));
-      });
+    try {
+      if (json['fault_codes'] != null) {
+            _faultCodes = [];
+            try {
+              json['fault_codes'].forEach((v) {
+                            _faultCodes?.add(FaultCodesModels.fromJson(v));
+                          });
+            } catch (e) {
+              print(e);
+            }
+          }
+      if (json['tools'] != null) {
+            _tools = [];
+            try {
+              json['tools'].forEach((v) {
+                            _tools?.add(ToolsModel.fromJson(v));
+                          });
+            } catch (e) {
+              print(e);
+            }
+          }
+      _privacyPolicy = json['privacy_policy'];
+      _termsAndConditions = json['terms_and_conditions'];
+      if (json['faqs'] != null) {
+            _faqs = [];
+            try {
+              json['faqs'].forEach((v) {
+                            //_faqs?.add(json.fromJson(v));
+                          });
+            } catch (e) {
+              print(e);
+            }
+          }
+    } catch (e) {
+      print(e);
     }
   }
 

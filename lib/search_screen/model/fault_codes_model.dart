@@ -33,23 +33,27 @@ class FaultCodesModels {
   }
 
   FaultCodesModels.fromJson(dynamic json) {
-    _code = json['code'];
-    _id = json['id'];
-    _codeId = json['code_id'];
-    _languageId = json['language_id'];
-    _title = json['title'];
-    _description = json['description'];
-    _causes = json['causes'] != null ? json['causes'].cast<String>() : [];
-    _solutions = json['solutions'] != null ? json['solutions'].cast<String>() : [];
-    _faultEqImage = json['fault_eq_image'];
-    _videoType = json['video_type'];
-    _videoLink = json['video_link'];
-    _equipmentId = json['equipment_id'];
-    if (json['fixes'] != null) {
-      _fixes = [];
-      json['fixes'].forEach((v) {
-        _fixes?.add(json.fromJson(v));
-      });
+    try {
+      _code = json['code'];
+      _id = json['id'];
+      _codeId = json['code_id'];
+      _languageId = json['language_id'];
+      _title = json['title'];
+      _description = json['description'];
+      _causes = json['causes'] != null ? json['causes'].cast<String>() : [];
+      _solutions = json['solutions'] != null ? json['solutions'].cast<String>() : [];
+      _faultEqImage = json['fault_eq_image'];
+      _videoType = json['video_type'];
+      _videoLink = json['video_link'];
+      _equipmentId = json['equipment_id'];
+      if (json['fixes'] != null) {
+            _fixes = [];
+            json['fixes'].forEach((v) {
+              _fixes?.add(json.fromJson(v));
+            });
+          }
+    } catch (e) {
+      print(e);
     }
   }
   String? _code;
